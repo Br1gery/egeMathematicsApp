@@ -13,6 +13,13 @@
         android:theme="@style/Theme.EgeMathematicsApp"
         tools:targetApi="31">
         <activity
+            android:name=".task_activity2"
+            android:exported="false" />
+        <activity
+            android:name=".taskActivity"
+            android:exported="false"
+            android:theme="@style/Theme.EgeMathematicsApp" />
+        <activity
             android:name=".registration_activity"
             android:exported="false" />
         <activity
@@ -27,7 +34,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
     </application>
 
 </manifest>
