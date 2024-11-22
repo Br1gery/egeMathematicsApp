@@ -53,6 +53,12 @@ public class registration_activity extends AppCompatActivity {
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dbHelper=new DBHelper(getApplicationContext());
+                try {
+                    database=dbHelper.getWritableDatabase();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
                 String email = loginEditText.getText().toString();
                 String pwd = passEditText.getText().toString();
                 String pwd_conf = passConfEditText.getText().toString();
@@ -71,12 +77,6 @@ public class registration_activity extends AppCompatActivity {
                     Toast myToast = Toast.makeText(getApplicationContext(),"Проверьте введенные данные",Toast.LENGTH_SHORT);
                     myToast.show();
                     return;
-                }
-                dbHelper=new DBHelper(getApplicationContext());
-                try {
-                    database=dbHelper.getWritableDatabase();
-                } catch (Exception e){
-                    e.printStackTrace();
                 }
 
                 String real_pwd = "";
