@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -41,6 +42,7 @@ public class login_activity extends AppCompatActivity {
     private EditText passEditText;
     private DBHelper dbHelper;
     private SQLiteDatabase database;
+    private TextView regViewBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class login_activity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         loginEditText = findViewById(R.id.emailEditText);
         passEditText = findViewById(R.id.pwdEditText);
+        regViewBtn = findViewById(R.id.textView5);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +109,14 @@ public class login_activity extends AppCompatActivity {
 //                }
 //                OkHttpHandler handler = new OkHttpHandler();
 //                handler.execute();
+            }
+        });
+
+        regViewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), registration_activity.class);
+                startActivity(intent);
             }
         });
     }
