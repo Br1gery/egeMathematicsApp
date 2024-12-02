@@ -1,10 +1,8 @@
 package com.example.egemathematicsapp;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,10 +16,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.egemathematicsapp.ui.home.DBHelper;
-import com.example.egemathematicsapp.ui.home.HomeFragment;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class task_activity2 extends AppCompatActivity {
 
@@ -31,6 +25,7 @@ public class task_activity2 extends AppCompatActivity {
     private TextView taskText;
     private DBHelper dbHelper;
     private SQLiteDatabase database;
+    private TextView explanationText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +35,19 @@ public class task_activity2 extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            explanationText.setVisibility(View.INVISIBLE);
             return insets;
         });
         Intent intent = getIntent();
         String taskTextfroView = String.valueOf(intent.getStringExtra("text_task"));
         String asnwer = String.valueOf(intent.getStringExtra("answer_task"));
+        String expl = String.valueOf(intent.getStringExtra("explanation_task"));
 
         taskText = findViewById(R.id.task_text_view2);
+        explanationText =findViewById(R.id.explanation_edit);
 
         taskText.setText(taskTextfroView);
+        explanationText.setText(expl);
 
         submitBtn = findViewById(R.id.submitBtn);
         answerEdit = findViewById(R.id.answerEditText);
@@ -68,6 +67,7 @@ public class task_activity2 extends AppCompatActivity {
                 if(answerEdit.getText().toString().equals(asnwer)){
 //                    Intent intent2 = new Intent(getApplicationContext(), task_activity2.class);
                     Toast myToast = Toast.makeText(getApplicationContext(),"Ваш ответ верный!",Toast.LENGTH_SHORT);
+                    explanationText.setVisibility(View.VISIBLE);
                     myToast.show();
 //                    startActivity(intent2);
 //                    Intent intent2 = new Intent(getApplicationContext(), task_activity2.class);

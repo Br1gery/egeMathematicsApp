@@ -69,7 +69,7 @@ public class DashboardFragment extends Fragment {
                 throw new RuntimeException(e);
             }
 
-            String url = "https://ll7pqrc3-8000.euw.devtunnels.ms/tasks/1";
+            String url = "https://f72kfzfg-8000.euw.devtunnels.ms/tasks/1";
 
             RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 

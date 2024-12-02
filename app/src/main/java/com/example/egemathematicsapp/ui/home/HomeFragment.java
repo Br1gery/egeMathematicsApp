@@ -47,6 +47,9 @@ public class HomeFragment extends Fragment {
     private String task_text;
     private  String task_answer;
     private Button getTaskbtn;
+    private Button getTaskbtn2;
+    private Button getTaskbtn3;
+    private String task_number;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,7 +59,9 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        getTaskbtn = binding.generateRandomTask;
+        getTaskbtn = binding.task1Btn;
+        getTaskbtn2 = binding.task1Btn2;
+        getTaskbtn3 = binding.task1Btn3;
 
         getTaskbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +97,23 @@ public class HomeFragment extends Fragment {
 //                intent.putExtra("task_text",tasks.get(index).get("text"));
 //                intent.putExtra("task_answer", tasks.get(index).get("answer"));
 //                startActivity(intent);
+                task_number = "1";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "2";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "3";
                 HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
                 handler.execute();
             }
@@ -127,7 +149,7 @@ public class HomeFragment extends Fragment {
             }
 //            RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "https://ll7pqrc3-8000.euw.devtunnels.ms/tasks/1";
+            String url = "https://f72kfzfg-8000.euw.devtunnels.ms/tasks/number/" + task_number;
 
             Request request = builder.url(String.format(url))
                     .build();
@@ -146,10 +168,12 @@ public class HomeFragment extends Fragment {
                     String name_task = object.getString("name");
                     String text_task =object.getString("text");
                     String answer_task =object.getString("answer");
+                    String explanation_task =object.getString("explanation");
                     Intent intent = new Intent(getActivity().getApplicationContext(), task_activity2.class);
                     intent.putExtra("name_task",name_task);
                     intent.putExtra("text_task",text_task);
                     intent.putExtra("answer_task",answer_task);
+                    intent.putExtra("explanation_task",explanation_task);
                     startActivity(intent);
                 } else {
                     return null;

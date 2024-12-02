@@ -143,7 +143,7 @@ public class login_activity extends AppCompatActivity {
             }
             RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "https://ll7pqrc3-8000.euw.devtunnels.ms/user/login";
+            String url = "https://f72kfzfg-8000.euw.devtunnels.ms/user/login";
 
             Request request = builder.url(String.format(url)).post(formBody)
                     .build();
