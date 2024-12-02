@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.FormBody;
+//import okhttp3.MediaType.Companion.toMediaType;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -36,6 +38,7 @@ import okhttp3.Response;
 
 public class login_activity extends AppCompatActivity {
 
+    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private Button loginBtn;
     private String loginStatus;
     private EditText loginEditText;
@@ -65,38 +68,38 @@ public class login_activity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = loginEditText.getText().toString();
                 String pwd = passEditText.getText().toString();
-                dbHelper=new DBHelper(getApplicationContext());
-                try {
-                    database=dbHelper.getWritableDatabase();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-
-                String real_pwd = "";
-                ArrayList<HashMap<String,String>> tasks =new ArrayList<>();
-                HashMap <String,String> task;
-                Cursor cursor = database.rawQuery("SELECT email, pwd FROM users WHERE pwd = $1 AND email = $2", new String[]{pwd, email});
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()){
-                    task=new HashMap<>();
-                    task.put("email", cursor.getString(0));
-                    task.put("pwd", cursor.getString(1));
-                    tasks.add(task);
-                    real_pwd = cursor.getString(1);
-                    cursor.moveToNext();
-                }
-                cursor.close();
-                Log.i("real",real_pwd);
-                Log.i("given",pwd);
-                if(!pwd.equals(real_pwd) || pwd.isEmpty() || email.isEmpty()){
-                    Toast myToast = Toast.makeText(getApplicationContext(),"Неверные данные",Toast.LENGTH_SHORT);
-                    myToast.show();
-                    return;
-                }
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                Toast myToast = Toast.makeText(getApplicationContext(),"Успешный вход",Toast.LENGTH_SHORT);
-                myToast.show();
-                startActivity(intent);
+//                dbHelper=new DBHelper(getApplicationContext());
+//                try {
+//                    database=dbHelper.getWritableDatabase();
+//                } catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//
+//                String real_pwd = "";
+//                ArrayList<HashMap<String,String>> tasks =new ArrayList<>();
+//                HashMap <String,String> task;
+//                Cursor cursor = database.rawQuery("SELECT email, pwd FROM users WHERE pwd = $1 AND email = $2", new String[]{pwd, email});
+//                cursor.moveToFirst();
+//                while (!cursor.isAfterLast()){
+//                    task=new HashMap<>();
+//                    task.put("email", cursor.getString(0));
+//                    task.put("pwd", cursor.getString(1));
+//                    tasks.add(task);
+//                    real_pwd = cursor.getString(1);
+//                    cursor.moveToNext();
+//                }
+//                cursor.close();
+//                Log.i("real",real_pwd);
+//                Log.i("given",pwd);
+//                if(!pwd.equals(real_pwd) || pwd.isEmpty() || email.isEmpty()){
+//                    Toast myToast = Toast.makeText(getApplicationContext(),"Неверные данные",Toast.LENGTH_SHORT);
+//                    myToast.show();
+//                    return;
+//                }
+//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                Toast myToast = Toast.makeText(getApplicationContext(),"Успешный вход",Toast.LENGTH_SHORT);
+//                myToast.show();
+//                startActivity(intent);
 //                if(loginEditText.getText().toString().equals("") && passEditText.getText().toString().equals("")){
 //                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 //                    Toast myToast = Toast.makeText(getApplicationContext(),"Успешный вход",Toast.LENGTH_SHORT);
@@ -107,8 +110,8 @@ public class login_activity extends AppCompatActivity {
 //                    Toast myToast = Toast.makeText(getApplicationContext(),"Неверные данные",Toast.LENGTH_SHORT);
 //                    myToast.show();
 //                }
-//                OkHttpHandler handler = new OkHttpHandler();
-//                handler.execute();
+                OkHttpHandler handler = new OkHttpHandler();
+                handler.execute();
             }
         });
 
@@ -126,15 +129,23 @@ public class login_activity extends AppCompatActivity {
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
             Request.Builder builder = new Request.Builder();
+//            RequestBody formBody = new FormBody.Builder()
+//                    .add("mail", loginEditText.getText().toString())
+//                    .add("password", passEditText.getText().toString())
+//                    .build();
 
-            RequestBody formBody = new FormBody.Builder()
-                    .add("username", loginEditText.getText().toString())
-                    .add("password", passEditText.getText().toString())
-                    .build();
+            JSONObject json = new JSONObject();
+            try {
+                json.put("mail", loginEditText.getText().toString());
+                json.put("password", passEditText.getText().toString());
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "http://127.0.0.1:8000/user/login";
+            String url = "https://ll7pqrc3-8000.euw.devtunnels.ms/user/login";
 
-            Request request = builder.url(url).post(formBody)
+            Request request = builder.url(String.format(url)).post(formBody)
                     .build();
 
             OkHttpClient client = new OkHttpClient();
@@ -142,12 +153,19 @@ public class login_activity extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 JSONObject object = new JSONObject(response.body().string());
-                try {
+                Log.i("xd", object.toString());
+                if (object.has("detail")) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(getApplicationContext(),"Неверные данные" , Toast.LENGTH_SHORT).show();
+                    });
+                    return null;
+                }
+                else if (object.has("token")) {
                     object.getString("token");
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                } else {
+                    return null;
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
