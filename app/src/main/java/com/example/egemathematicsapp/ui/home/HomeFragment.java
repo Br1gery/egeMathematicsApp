@@ -149,7 +149,7 @@ public class HomeFragment extends Fragment {
             }
 //            RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "https://f72kfzfg-8000.euw.devtunnels.ms/tasks/number/" + task_number;
+            String url = "https://mp460zr5-8000.euw.devtunnels.ms/tasks/number/" + task_number;
 
             Request request = builder.url(String.format(url))
                     .build();
@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment {
             try {
                 Response response = client.newCall(request).execute();
                 JSONObject object = new JSONObject(response.body().string());
-                Log.i("xd", object.toString());
+//                Log.i("xd", object.toString());
                 if (object.has("detail")) {
                     Toast.makeText(getActivity().getApplicationContext(),"Что-то пошло не так" , Toast.LENGTH_SHORT).show();
                     return null;

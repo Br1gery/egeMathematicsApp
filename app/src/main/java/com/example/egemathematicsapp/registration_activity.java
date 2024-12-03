@@ -150,7 +150,7 @@ public class registration_activity extends AppCompatActivity {
             }
             RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "https://f72kfzfg-8000.euw.devtunnels.ms/user/reg";
+            String url = "https://mp460zr5-8000.euw.devtunnels.ms/user/reg";
 
             Request request = builder.url(String.format(url)).post(formBody)
                     .build();

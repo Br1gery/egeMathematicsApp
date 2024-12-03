@@ -1,6 +1,9 @@
 package com.example.egemathematicsapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -46,6 +49,7 @@ public class login_activity extends AppCompatActivity {
     private DBHelper dbHelper;
     private SQLiteDatabase database;
     private TextView regViewBtn;
+    private String token2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,13 @@ public class login_activity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+            String restoredText = prefs.getString("token", "");
+//                    Log.i("tok",restoredText);
+            if(!(restoredText.isEmpty())){
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
             return insets;
         });
 
@@ -112,6 +123,7 @@ public class login_activity extends AppCompatActivity {
 //                }
                 OkHttpHandler handler = new OkHttpHandler();
                 handler.execute();
+
             }
         });
 
@@ -143,7 +155,7 @@ public class login_activity extends AppCompatActivity {
             }
             RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "https://f72kfzfg-8000.euw.devtunnels.ms/user/login";
+            String url = "https://mp460zr5-8000.euw.devtunnels.ms/user/login";
 
             Request request = builder.url(String.format(url)).post(formBody)
                     .build();
@@ -153,7 +165,8 @@ public class login_activity extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 JSONObject object = new JSONObject(response.body().string());
-                Log.i("xd", object.toString());
+
+//                Log.i("xd", object.toString());
                 if (object.has("detail")) {
                     runOnUiThread(() -> {
                         Toast.makeText(getApplicationContext(),"Неверные данные" , Toast.LENGTH_SHORT).show();
@@ -161,9 +174,23 @@ public class login_activity extends AppCompatActivity {
                     return null;
                 }
                 else if (object.has("token")) {
-                    object.getString("token");
+                    SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+                    String restoredText = prefs.getString("token", "");
+//                    Log.i("tok",restoredText);
+                    if(restoredText.equals("")){
+                        token2 = object.getString("token");
+                        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+                        editor.putString("token", token2);
+                        editor.apply();
+                    }
+                    else{
+                        Log.i("tok",restoredText);
+                    }
+                    Log.i("tok2",restoredText);
+//                Log.i("xd",token2);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+
                 } else {
                     return null;
                 }

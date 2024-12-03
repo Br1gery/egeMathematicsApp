@@ -1,8 +1,11 @@
 package com.example.egemathematicsapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,6 +72,9 @@ public class task_activity2 extends AppCompatActivity {
                     Toast myToast = Toast.makeText(getApplicationContext(),"Ваш ответ верный!",Toast.LENGTH_SHORT);
                     explanationText.setVisibility(View.VISIBLE);
                     myToast.show();
+                    SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+                    String restoredText = prefs.getString("token", "");
+                    Log.i("tok",restoredText);
 //                    startActivity(intent2);
 //                    Intent intent2 = new Intent(getApplicationContext(), task_activity2.class);
 //                    dbHelper=new DBHelper(getApplicationContext());
