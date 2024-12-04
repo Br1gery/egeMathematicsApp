@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import okhttp3.FormBody;
 //import okhttp3.MediaType.Companion.toMediaType;
@@ -45,10 +46,19 @@ public class HomeFragment extends Fragment {
     private DBHelper dbHelper;
     private SQLiteDatabase database;
     private String task_text;
-    private  String task_answer;
+    private String task_answer;
     private Button getTaskbtn;
     private Button getTaskbtn2;
     private Button getTaskbtn3;
+    private Button getTaskbtn4;
+    private Button getTaskbtn5;
+    private Button getTaskbtn6;
+    private Button getTaskbtn7;
+    private Button getTaskbtn8;
+    private Button getTaskbtn9;
+    private Button getTaskbtn10;
+    private Button getTaskbtn11;
+    private Button getTaskbtn12;
     private String task_number;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -62,6 +72,16 @@ public class HomeFragment extends Fragment {
         getTaskbtn = binding.task1Btn;
         getTaskbtn2 = binding.task1Btn2;
         getTaskbtn3 = binding.task1Btn3;
+        getTaskbtn4 = binding.task1Btn4;
+        getTaskbtn5 = binding.task1Btn5;
+        getTaskbtn6 = binding.task1Btn6;
+        getTaskbtn7 = binding.task1Btn7;
+        getTaskbtn8 = binding.task1Btn8;
+        getTaskbtn9 = binding.task1Btn9;
+        getTaskbtn10 = binding.task1Btn10;
+        getTaskbtn11 = binding.task1Btn11;
+        getTaskbtn12 = binding.task1Btn12;
+
 
         getTaskbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +138,78 @@ public class HomeFragment extends Fragment {
                 handler.execute();
             }
         });
-
+        getTaskbtn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "4";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "5";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "6";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "7";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "8";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "9";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "10";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "11";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
+        getTaskbtn12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task_number = "12";
+                HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
+                handler.execute();
+            }
+        });
 
 
         return root;
@@ -149,7 +240,7 @@ public class HomeFragment extends Fragment {
             }
 //            RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "https://mp460zr5-8000.euw.devtunnels.ms/tasks/number/" + task_number;
+            String url = "https://ll7pqrc3-8000.euw.devtunnels.ms/tasks/number/" + task_number;
 
             Request request = builder.url(String.format(url))
                     .build();
@@ -161,19 +252,18 @@ public class HomeFragment extends Fragment {
                 JSONObject object = new JSONObject(response.body().string());
 //                Log.i("xd", object.toString());
                 if (object.has("detail")) {
-                    Toast.makeText(getActivity().getApplicationContext(),"Что-то пошло не так" , Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireActivity().getApplicationContext(), "Что-то пошло не так", Toast.LENGTH_SHORT).show();
                     return null;
-                }
-                else if (object.has("id")) {
+                } else if (object.has("id")) {
                     String name_task = object.getString("name");
-                    String text_task =object.getString("text");
-                    String answer_task =object.getString("answer");
-                    String explanation_task =object.getString("explanation");
+                    String text_task = object.getString("text");
+                    String answer_task = object.getString("answer");
+                    String explanation_task = object.getString("explanation");
                     Intent intent = new Intent(getActivity().getApplicationContext(), task_activity2.class);
-                    intent.putExtra("name_task",name_task);
-                    intent.putExtra("text_task",text_task);
-                    intent.putExtra("answer_task",answer_task);
-                    intent.putExtra("explanation_task",explanation_task);
+                    intent.putExtra("name_task", name_task);
+                    intent.putExtra("text_task", text_task);
+                    intent.putExtra("answer_task", answer_task);
+                    intent.putExtra("explanation_task", explanation_task);
                     startActivity(intent);
                 } else {
                     return null;

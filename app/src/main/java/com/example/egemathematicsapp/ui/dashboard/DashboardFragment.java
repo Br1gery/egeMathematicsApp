@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.egemathematicsapp.MainActivity;
 import com.example.egemathematicsapp.databinding.FragmentDashboardBinding;
+import com.example.egemathematicsapp.login_activity;
 import com.example.egemathematicsapp.task_activity2;
 
 import org.json.JSONException;
@@ -31,6 +34,8 @@ import okhttp3.Response;
 
 public class DashboardFragment extends Fragment {
 
+    private Button logOutBtn;
+
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private FragmentDashboardBinding binding;
 
@@ -41,6 +46,18 @@ public class DashboardFragment extends Fragment {
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        logOutBtn = binding.logOutBtn;
+
+        logOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), login_activity.class);
+                intent.putExtra("exit",true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
         return root;
     }
@@ -69,7 +86,7 @@ public class DashboardFragment extends Fragment {
                 throw new RuntimeException(e);
             }
 
-            String url = "https://mp460zr5-8000.euw.devtunnels.ms/tasks/1";
+            String url = "https://ll7pqrc3-8000.euw.devtunnels.ms/tasks/1";
 
             RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 

@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.egemathematicsapp.ui.home.DBHelper;
+import com.example.egemathematicsapp.ui.home.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +51,7 @@ public class login_activity extends AppCompatActivity {
     private SQLiteDatabase database;
     private TextView regViewBtn;
     private String token2;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +61,25 @@ public class login_activity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            Intent intent = getIntent();
+            boolean exitToken = intent.getBooleanExtra("exit", false);
             SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-            String restoredText = prefs.getString("token", "");
+            if(!exitToken){
+                String restoredText = prefs.getString("token", "");
 //                    Log.i("tok",restoredText);
-            if(!(restoredText.isEmpty())){
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                if(!(restoredText.isEmpty())){
+                    String restoredUserName = prefs.getString("userName", "");
+                    Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
+
+                    //https://stackoverflow.com/questions/15392261/android-pass-dataextras-to-a-fragment
+
+                    startActivity(intent2);
+                }
+            }
+            else{
+                SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+                editor.putString("token", "");
+                editor.apply();
             }
             return insets;
         });
@@ -155,7 +170,7 @@ public class login_activity extends AppCompatActivity {
             }
             RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "https://mp460zr5-8000.euw.devtunnels.ms/user/login";
+            String url = "https://ll7pqrc3-8000.euw.devtunnels.ms/user/login";
 
             Request request = builder.url(String.format(url)).post(formBody)
                     .build();
@@ -179,8 +194,10 @@ public class login_activity extends AppCompatActivity {
 //                    Log.i("tok",restoredText);
                     if(restoredText.equals("")){
                         token2 = object.getString("token");
+                        userName = loginEditText.getText().toString();
                         SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
                         editor.putString("token", token2);
+                        editor.putString("userName", userName);
                         editor.apply();
                     }
                     else{
