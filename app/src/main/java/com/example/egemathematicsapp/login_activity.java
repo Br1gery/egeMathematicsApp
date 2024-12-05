@@ -14,15 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.egemathematicsapp.MyApplication;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.egemathematicsapp.ui.dashboard.DashboardViewModel;
 import com.example.egemathematicsapp.ui.home.DBHelper;
 import com.example.egemathematicsapp.ui.home.HomeFragment;
+import com.example.egemathematicsapp.ui.home.HomeViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,12 +77,16 @@ public class login_activity extends AppCompatActivity {
 
                     //https://stackoverflow.com/questions/15392261/android-pass-dataextras-to-a-fragment
 
+                    ((MyApplication)getApplicationContext()).setSomeVariable("userName",restoredUserName);
+                    ((MyApplication)getApplicationContext()).setSomeVariable("token",restoredText);
+
                     startActivity(intent2);
                 }
             }
             else{
                 SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
                 editor.putString("token", "");
+                editor.putString("userName", "");
                 editor.apply();
             }
             return insets;

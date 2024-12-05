@@ -1,6 +1,7 @@
 package com.example.egemathematicsapp.ui.home;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.egemathematicsapp.MainActivity;
+import com.example.egemathematicsapp.MyApplication;
 import com.example.egemathematicsapp.databinding.FragmentHomeBinding;
 import com.example.egemathematicsapp.registration_activity;
 import com.example.egemathematicsapp.taskActivity;
@@ -68,7 +70,6 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         getTaskbtn = binding.task1Btn;
         getTaskbtn2 = binding.task1Btn2;
         getTaskbtn3 = binding.task1Btn3;
