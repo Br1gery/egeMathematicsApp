@@ -29,10 +29,6 @@ public class taskActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_task);
-//        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,11 +39,3 @@ public class taskActivity extends AppCompatActivity {
         });
     }
 }
-
-//    @Override
-//    public boolean onSupportNavigateUp() {
-////        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_task);
-////        return NavigationUI.navigateUp(navController, appBarConfiguration)
-////                || super.onSupportNavigateUp();
-//    }
-//}

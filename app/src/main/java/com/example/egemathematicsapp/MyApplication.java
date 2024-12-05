@@ -8,13 +8,17 @@ public class MyApplication extends Application {
 
     private String userName;
     private String token;//сами переменные
-
+    private String url = "https://f72kfzfg-8000.euw.devtunnels.ms/";
+    //((MyApplication) getActivity().getApplicationContext()).getSomeVariable("userName");
     public String getSomeVariable(String variable) { //метод для получения
         if(Objects.equals(variable, "userName")){
             return userName;
         }
         else if(Objects.equals(variable, "token")){
             return token;
+        }
+        else if(Objects.equals(variable, "url")){
+            return url;
         }
         return null;
     }

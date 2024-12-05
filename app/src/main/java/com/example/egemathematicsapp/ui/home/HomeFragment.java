@@ -87,37 +87,7 @@ public class HomeFragment extends Fragment {
         getTaskbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(getActivity().getApplicationContext(), task_activity2.class);
-//                dbHelper=new DBHelper(getActivity().getApplicationContext());
-//                try {
-//                    database=dbHelper.getWritableDatabase();
-//                } catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//
-//
-//                ArrayList<HashMap<String,String>> tasks =new ArrayList<>();
-//                HashMap <String,String> task;
-//                Cursor cursor = database.rawQuery("SELECT task_text, task_answer FROM tasks", null);
-//                cursor.moveToFirst();
-//                while (!cursor.isAfterLast()){
-//                    task_text =cursor.getString(0);
-//                    task_answer = cursor.getString(1);
-//                    Log.i("xd", task_text);
-//                    Log.i("xd", task_answer);
-//                    task=new HashMap<>();
-//                    task.put("text", cursor.getString(0));
-//                    task.put("answer", cursor.getString(1));
-//                    tasks.add(task);
-//                    cursor.moveToNext();
-//                }
-//                cursor.close();
-//                int index = (int)(Math.random() * tasks.size());
-//                Log.i("testing", tasks.get(index).get("text"));
-//                Log.i("testingAnswer", tasks.get(index).get("answer"));
-//                intent.putExtra("task_text",tasks.get(index).get("text"));
-//                intent.putExtra("task_answer", tasks.get(index).get("answer"));
-//                startActivity(intent);
+
                 task_number = "1";
                 HomeFragment.OkHttpHandler handler = new HomeFragment.OkHttpHandler();
                 handler.execute();
@@ -241,7 +211,7 @@ public class HomeFragment extends Fragment {
             }
 //            RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "https://ll7pqrc3-8000.euw.devtunnels.ms/tasks/number/" + task_number;
+            String url = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("url")+ "tasks/number/" + task_number;
 
             Request request = builder.url(String.format(url))
                     .build();

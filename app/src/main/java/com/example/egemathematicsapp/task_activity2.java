@@ -68,41 +68,12 @@ public class task_activity2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(answerEdit.getText().toString().equals(asnwer)){
-//                    Intent intent2 = new Intent(getApplicationContext(), task_activity2.class);
                     Toast myToast = Toast.makeText(getApplicationContext(),"Ваш ответ верный!",Toast.LENGTH_SHORT);
                     explanationText.setVisibility(View.VISIBLE);
                     myToast.show();
                     SharedPreferences prefs = getPreferences(MODE_PRIVATE);
                     String restoredText = prefs.getString("token", "");
                     Log.i("tok",restoredText);
-//                    startActivity(intent2);
-//                    Intent intent2 = new Intent(getApplicationContext(), task_activity2.class);
-//                    dbHelper=new DBHelper(getApplicationContext());
-//                    try {
-//                        database=dbHelper.getWritableDatabase();
-//                    } catch (Exception e){
-//                        e.printStackTrace();
-//                    }
-
-
-//                    ArrayList<HashMap<String,String>> tasks =new ArrayList<>();
-//                    HashMap <String,String> task;
-//                    Cursor cursor = database.rawQuery("SELECT task_text, task_answer FROM tasks", null);
-//                    cursor.moveToFirst();
-//                    while (!cursor.isAfterLast()){
-//                        task=new HashMap<>();
-//                        task.put("text", cursor.getString(0));
-//                        task.put("answer", cursor.getString(1));
-//                        tasks.add(task);
-//                        cursor.moveToNext();
-//                    }
-//                    cursor.close();
-//                    int index = (int)(Math.random() * tasks.size());
-//                    Log.i("testing", tasks.get(index).get("text"));
-//                    Log.i("testingAnswer", tasks.get(index).get("answer"));
-//                    intent2.putExtra("task_text",tasks.get(index).get("text"));
-//                    intent2.putExtra("task_answer", tasks.get(index).get("answer"));
-//                    startActivity(intent2);
                 }
                 else{
                     Toast myToast = Toast.makeText(getApplicationContext(),"Ваш ответ неверный!",Toast.LENGTH_SHORT);

@@ -71,23 +71,6 @@ public class registration_activity extends AppCompatActivity {
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                dbHelper=new DBHelper(getApplicationContext());
-//                try {
-//                    database=dbHelper.getWritableDatabase();
-//                } catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//                Boolean userExists = true;
-//                String existingEmail = "";
-//                Cursor cursor = database.rawQuery("SELECT email FROM users WHERE email = $1", new String[]{email});
-//                cursor.moveToFirst();
-//                while (!cursor.isAfterLast()){
-//                    existingEmail = cursor.getString(0);
-//                    cursor.moveToNext();
-//                }
-//                cursor.close();
-//                Log.i("emailEx", existingEmail);
-//                Log.i("REalEmail",email);
                 String email = loginEditText.getText().toString();
                 String pwd = passEditText.getText().toString();
                 String pwd_conf = passConfEditText.getText().toString();
@@ -99,24 +82,6 @@ public class registration_activity extends AppCompatActivity {
                     myToast.show();
                     return;
                 }
-//                String real_pwd = "";
-//                ArrayList<HashMap<String,String>> tasks =new ArrayList<>();
-//                HashMap <String,String> task;
-//                database.execSQL("INSERT INTO users(email, pwd) VALUES($1,$2)", new String[]{pwd, email});
-////                cursor.moveToFirst();
-////                while (!cursor.isAfterLast()){
-////                    task=new HashMap<>();
-////                    task.put("email", cursor.getString(0));
-////                    task.put("pwd", cursor.getString(1));
-////                    tasks.add(task);
-////                    real_pwd = cursor.getString(1);
-////                    cursor.moveToNext();
-////                }
-////                cursor.close();
-//                Intent intent = new Intent(getApplicationContext(), login_activity.class);
-//                Toast myToast = Toast.makeText(getApplicationContext(),"Успешная регистрация",Toast.LENGTH_SHORT);
-//                myToast.show();
-//                startActivity(intent);
                 registration_activity.OkHttpHandler handler = new registration_activity.OkHttpHandler();
                 handler.execute();
             }
@@ -136,10 +101,6 @@ public class registration_activity extends AppCompatActivity {
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
             Request.Builder builder = new Request.Builder();
-//            RequestBody formBody = new FormBody.Builder()
-//                    .add("mail", loginEditText.getText().toString())
-//                    .add("password", passEditText.getText().toString())
-//                    .build();
 
             JSONObject json = new JSONObject();
             try {
@@ -150,7 +111,7 @@ public class registration_activity extends AppCompatActivity {
             }
             RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
-            String url = "https://ll7pqrc3-8000.euw.devtunnels.ms/user/reg";
+            String url = ((MyApplication) getApplicationContext()).getSomeVariable("url")+"user/reg";
 
             Request request = builder.url(String.format(url)).post(formBody)
                     .build();
