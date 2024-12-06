@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,18 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.egemathematicsapp.ui.home.DBHelper;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class task_activity2 extends AppCompatActivity {
 
     private Button submitBtn;
@@ -29,6 +42,7 @@ public class task_activity2 extends AppCompatActivity {
     private DBHelper dbHelper;
     private SQLiteDatabase database;
     private TextView explanationText;
+    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +84,10 @@ public class task_activity2 extends AppCompatActivity {
                 if(answerEdit.getText().toString().equals(asnwer)){
                     Toast myToast = Toast.makeText(getApplicationContext(),"Ваш ответ верный!",Toast.LENGTH_SHORT);
                     explanationText.setVisibility(View.VISIBLE);
+                    submitBtn.setVisibility(View.INVISIBLE);
                     myToast.show();
-                    SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-                    String restoredText = prefs.getString("token", "");
-                    Log.i("tok",restoredText);
+                    task_activity2.OkHttpHandler handler = new task_activity2.OkHttpHandler();
+                    handler.execute();
                 }
                 else{
                     Toast myToast = Toast.makeText(getApplicationContext(),"Ваш ответ неверный!",Toast.LENGTH_SHORT);
@@ -82,4 +96,54 @@ public class task_activity2 extends AppCompatActivity {
             }
         });
     }
+
+    public class OkHttpHandler extends AsyncTask<Void, Void, ArrayList<String>> {
+
+        @Override
+        protected ArrayList<String> doInBackground(Void... params) {
+            Request.Builder builder = new Request.Builder();
+
+            String mail = ((MyApplication) getApplicationContext()).getSomeVariable("userName");
+
+            JSONObject json = new JSONObject();
+            try {
+                json.put("mail", mail);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
+
+            String url = ((MyApplication) getApplicationContext()).getSomeVariable("url") + "tasks/solveTask";
+
+            Request request = builder.url(String.format(url)).post(formBody)
+                    .build();
+
+            OkHttpClient client = new OkHttpClient();
+
+            try {
+                Response response = client.newCall(request).execute();
+                JSONObject object = new JSONObject(response.body().string());
+
+//                Log.i("xd", object.toString());
+                if (object.has("detail")) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(getApplicationContext(),"Что-то пошло не так" , Toast.LENGTH_SHORT).show();
+                    });
+                    return null;
+                }
+                else {
+                    return null;
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> array) {
+            super.onPostExecute(array);
+        }
+    }
+
 }
