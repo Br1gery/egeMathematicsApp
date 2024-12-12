@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.egemathematicsapp.MyApplication;
 
 import androidx.activity.EdgeToEdge;
@@ -56,6 +57,7 @@ public class login_activity extends AppCompatActivity {
     private TextView regViewBtn;
     private String token2;
     private String userName;
+    private boolean exitToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,30 +67,41 @@ public class login_activity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            Intent intent = getIntent();
-            boolean exitToken = intent.getBooleanExtra("exit", false);
-            SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-            if(!exitToken){
-                String restoredText = prefs.getString("token", "");
-//                    Log.i("tok",restoredText);
-                if(!(restoredText.isEmpty())){
-                    String restoredUserName = prefs.getString("userName", "");
-                    Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
-
-                    //https://stackoverflow.com/questions/15392261/android-pass-dataextras-to-a-fragment
-
-                    ((MyApplication)getApplicationContext()).setSomeVariable("userName",restoredUserName);
-                    ((MyApplication)getApplicationContext()).setSomeVariable("token",restoredText);
-
-                    startActivity(intent2);
-                }
-            }
-            else{
-                SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-                editor.putString("token", "");
-                editor.putString("userName", "");
-                editor.apply();
-            }
+//            Intent intent = getIntent();
+//            exitToken = intent.getBooleanExtra("exit", false);
+//            SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+//            Log.i("exitFlag", String.valueOf(exitToken));
+//            if(!exitToken){
+//                String restoredText = prefs.getString("token", "");
+//                    Log.i("tokenRestored",restoredText);
+//                if(!(restoredText.isEmpty())){
+//                    String restoredUserName = prefs.getString("userName", "");
+//                    Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
+//
+//                    //https://stackoverflow.com/questions/15392261/android-pass-dataextras-to-a-fragment
+//                    Log.i("userNameBefore",((MyApplication) getApplicationContext()).getSomeVariable("userName"));
+//                    Log.i("tokenBefore",((MyApplication) getApplicationContext()).getSomeVariable("token"));
+//
+//                    ((MyApplication)getApplicationContext()).setSomeVariable("userName",restoredUserName);
+//                    ((MyApplication)getApplicationContext()).setSomeVariable("token",restoredText);
+//
+//                    Log.i("userNameAfter",((MyApplication) getApplicationContext()).getSomeVariable("userName"));
+//                    Log.i("tokenAfter",((MyApplication) getApplicationContext()).getSomeVariable("token"));
+//
+//                    startActivity(intent2);
+//                }
+//            }
+//            else{
+//                SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+//                editor.putString("token", "");
+//                editor.putString("userName", "");
+//                editor.apply();
+//                ((MyApplication)getApplicationContext()).setSomeVariable("userName","");
+//                ((MyApplication)getApplicationContext()).setSomeVariable("token","");
+//
+//                Log.i("userNameAfterExit",((MyApplication) getApplicationContext()).getSomeVariable("userName"));
+//                Log.i("tokenAfterExit",((MyApplication) getApplicationContext()).getSomeVariable("token"));
+//            }
             return insets;
         });
 
@@ -100,8 +113,10 @@ public class login_activity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = loginEditText.getText().toString();
-                String pwd = passEditText.getText().toString();
+//                exitToken = false;
+//
+//                String email = loginEditText.getText().toString();
+//                String pwd = passEditText.getText().toString();
 
                 OkHttpHandler handler = new OkHttpHandler();
                 handler.execute();
@@ -147,26 +162,22 @@ public class login_activity extends AppCompatActivity {
 //                Log.i("xd", object.toString());
                 if (object.has("detail")) {
                     runOnUiThread(() -> {
-                        Toast.makeText(getApplicationContext(),"Неверные данные" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Неверные данные", Toast.LENGTH_SHORT).show();
                     });
                     return null;
-                }
-                else if (object.has("token")) {
-                    SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-                    String restoredText = prefs.getString("token", "");
+                } else if (object.has("token")) {
 //                    Log.i("tok",restoredText);
-                    if(restoredText.equals("")){
-                        token2 = object.getString("token");
-                        userName = loginEditText.getText().toString();
-                        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-                        editor.putString("token", token2);
-                        editor.putString("userName", userName);
-                        editor.apply();
-                    }
-                    else{
-                        Log.i("tok",restoredText);
-                    }
-                    Log.i("tok2",restoredText);
+                    token2 = object.getString("token");
+                    userName = loginEditText.getText().toString();
+//                        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+//                        editor.putString("token", token2);
+//                        editor.putString("userName", userName);
+//                        editor.apply();
+                    ((MyApplication) getApplicationContext()).setSomeVariable("userName", userName);
+                    ((MyApplication) getApplicationContext()).setSomeVariable("token", token2);
+//
+                    Log.i("userNameAfterEntering", ((MyApplication) getApplicationContext()).getSomeVariable("userName"));
+                    Log.i("tokenAfterEntering", ((MyApplication) getApplicationContext()).getSomeVariable("token"));
 //                Log.i("xd",token2);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);

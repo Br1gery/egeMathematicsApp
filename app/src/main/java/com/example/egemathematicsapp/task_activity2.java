@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.egemathematicsapp.ui.home.DBHelper;
 
 import org.json.JSONException;
@@ -42,6 +45,8 @@ public class task_activity2 extends AppCompatActivity {
     private DBHelper dbHelper;
     private SQLiteDatabase database;
     private TextView explanationText;
+    private ImageView textImageView;
+    private ImageView explanationImageView;
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     @Override
@@ -53,6 +58,7 @@ public class task_activity2 extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             explanationText.setVisibility(View.INVISIBLE);
+            explanationImageView.setVisibility(View.INVISIBLE);
             return insets;
         });
         Intent intent = getIntent();
@@ -63,12 +69,22 @@ public class task_activity2 extends AppCompatActivity {
         taskText = findViewById(R.id.task_text_view2);
         explanationText =findViewById(R.id.explanation_edit);
 
-        taskText.setText(taskTextfroView);
-        explanationText.setText(expl);
+//        taskText.setText(taskTextfroView);
+//        explanationText.setText(expl);
 
         submitBtn = findViewById(R.id.submitBtn);
         answerEdit = findViewById(R.id.answerEditText);
         returnBtn = findViewById(R.id.returnBtn);
+
+        textImageView = findViewById(R.id.taskTextView);
+        explanationImageView = findViewById(R.id.taskExplanationView);
+
+        Glide.with(this)
+                .load("https://ll7pqrc3-8000.euw.devtunnels.ms/tasks/textPhotos/Screenshot_4.png")
+                .into(textImageView);
+        Glide.with(this)
+                .load("https://ll7pqrc3-8000.euw.devtunnels.ms/tasks/textPhotos/Screenshot_4.png")
+                .into(explanationImageView);
 
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +100,7 @@ public class task_activity2 extends AppCompatActivity {
                 if(answerEdit.getText().toString().equals(asnwer)){
                     Toast myToast = Toast.makeText(getApplicationContext(),"Ваш ответ верный!",Toast.LENGTH_SHORT);
                     explanationText.setVisibility(View.VISIBLE);
+                    explanationImageView.setVisibility(View.VISIBLE);
                     submitBtn.setVisibility(View.INVISIBLE);
                     myToast.show();
                     task_activity2.OkHttpHandler handler = new task_activity2.OkHttpHandler();

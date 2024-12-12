@@ -56,6 +56,8 @@ public class DashboardFragment extends Fragment {
 
         String userName = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("userName");
 
+        Log.i("UsernameProfile",userName);
+
         userNameText = binding.emailTextEdit;
         logOutBtn = binding.logOutBtn;
 //        String token = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("token");

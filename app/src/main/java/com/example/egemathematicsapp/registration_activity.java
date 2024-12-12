@@ -129,7 +129,7 @@ public class registration_activity extends AppCompatActivity {
                     return null;
                 } else if (object.has("id")) {
                     object.getString("id");
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), login_activity.class);
                     startActivity(intent);
                 } else {
                     return null;
