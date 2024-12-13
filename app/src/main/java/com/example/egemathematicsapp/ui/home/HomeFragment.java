@@ -230,11 +230,15 @@ public class HomeFragment extends Fragment {
                     String text_task = object.getString("text");
                     String answer_task = object.getString("answer");
                     String explanation_task = object.getString("explanation");
+                    String explanation_photo = object.getString("explanation_photo");
+                    String text_photo = object.getString("text_photo");
                     Intent intent = new Intent(getActivity().getApplicationContext(), task_activity2.class);
                     intent.putExtra("name_task", name_task);
                     intent.putExtra("text_task", text_task);
                     intent.putExtra("answer_task", answer_task);
                     intent.putExtra("explanation_task", explanation_task);
+                    intent.putExtra("explanation_photo", explanation_photo);
+                    intent.putExtra("text_photo", text_photo);
                     startActivity(intent);
                 } else {
                     return null;

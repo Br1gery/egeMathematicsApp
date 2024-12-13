@@ -65,6 +65,8 @@ public class task_activity2 extends AppCompatActivity {
         String taskTextfroView = String.valueOf(intent.getStringExtra("text_task"));
         String asnwer = String.valueOf(intent.getStringExtra("answer_task"));
         String expl = String.valueOf(intent.getStringExtra("explanation_task"));
+        String explanation_photo = String.valueOf(intent.getStringExtra("explanation_photo"));
+        String text_photo = String.valueOf(intent.getStringExtra("text_photo"));
 
         taskText = findViewById(R.id.task_text_view2);
         explanationText =findViewById(R.id.explanation_edit);
@@ -79,11 +81,13 @@ public class task_activity2 extends AppCompatActivity {
         textImageView = findViewById(R.id.taskTextView);
         explanationImageView = findViewById(R.id.taskExplanationView);
 
+        Log.i("url",((MyApplication) getApplicationContext()).getSomeVariable("url") + "tasks/textPhotos/" + text_photo);
+
         Glide.with(this)
-                .load("https://ll7pqrc3-8000.euw.devtunnels.ms/tasks/textPhotos/Screenshot_4.png")
+                .load(((MyApplication) getApplicationContext()).getSomeVariable("url") + "tasks/textPhotos/" + text_photo)
                 .into(textImageView);
         Glide.with(this)
-                .load("https://ll7pqrc3-8000.euw.devtunnels.ms/tasks/textPhotos/Screenshot_4.png")
+                .load(((MyApplication) getApplicationContext()).getSomeVariable("url")+ "tasks/textPhotos/" + explanation_photo)
                 .into(explanationImageView);
 
         returnBtn.setOnClickListener(new View.OnClickListener() {
