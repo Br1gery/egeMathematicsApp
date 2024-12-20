@@ -113,9 +113,11 @@ public class DashboardFragment extends Fragment {
             }
             RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
+
             String url = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("url") + "user/getTasksSolved";
 
-            Request request = builder.url(String.format(url)).post(formBody)
+            String token = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("token");
+            Request request = builder.url(String.format(url)).post(formBody).addHeader("Authorization","Bearer " + token)
                     .build();
 
             OkHttpClient client = new OkHttpClient();
