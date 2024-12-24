@@ -81,8 +81,6 @@ public class task_activity2 extends AppCompatActivity {
         textImageView = findViewById(R.id.taskTextView);
         explanationImageView = findViewById(R.id.taskExplanationView);
 
-        Log.i("url",((MyApplication) getApplicationContext()).getSomeVariable("url") + "tasks/textPhotos/" + text_photo);
-
         Glide.with(this)
                 .load(((MyApplication) getApplicationContext()).getSomeVariable("url") + "tasks/textPhotos/" + text_photo)
                 .into(textImageView);

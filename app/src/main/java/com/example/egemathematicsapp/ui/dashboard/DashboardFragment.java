@@ -98,11 +98,9 @@ public class DashboardFragment extends Fragment {
     }
 
     public class OkHttpHandler extends AsyncTask<Void, Void, ArrayList<String>> {
-
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
             Request.Builder builder = new Request.Builder();
-
             String mail = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("userName");
 
             JSONObject json = new JSONObject();
@@ -112,7 +110,6 @@ public class DashboardFragment extends Fragment {
                 throw new RuntimeException(e);
             }
             RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
-
 
             String url = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("url") + "user/getTasksSolved";
 
@@ -126,12 +123,6 @@ public class DashboardFragment extends Fragment {
                 Response response = client.newCall(request).execute();
                 JSONObject object = new JSONObject(response.body().string());
 
-//                Log.i("xd", object.toString());
-//                if (object.has("detail")) {
-//                    getActivity().runOnUiThread(() -> {
-//                        Toast.makeText(getActivity().getApplicationContext(), "Что-то пошло не так", Toast.LENGTH_SHORT).show();
-//                    });
-//                    return null;
                 if (object.has("tasks")) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override

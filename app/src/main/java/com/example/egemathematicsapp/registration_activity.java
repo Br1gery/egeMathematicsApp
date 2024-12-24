@@ -74,9 +74,6 @@ public class registration_activity extends AppCompatActivity {
                 String email = loginEditText.getText().toString();
                 String pwd = passEditText.getText().toString();
                 String pwd_conf = passConfEditText.getText().toString();
-                Log.i("xd",pwd_conf);
-                Log.i("xd",pwd);
-                Log.i("xd",email);
                 if (pwd_conf.isEmpty() || !pwd.equals(pwd_conf) || email.isEmpty()) {
                     Toast myToast = Toast.makeText(getApplicationContext(), "Проверьте введенные данные", Toast.LENGTH_SHORT);
                     myToast.show();
