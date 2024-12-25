@@ -81,8 +81,6 @@ public class task_activity2 extends AppCompatActivity {
         textImageView = findViewById(R.id.taskTextView);
         explanationImageView = findViewById(R.id.taskExplanationView);
 
-        Log.i("url",((MyApplication) getApplicationContext()).getSomeVariable("url") + "tasks/textPhotos/" + text_photo);
-
         Glide.with(this)
                 .load(((MyApplication) getApplicationContext()).getSomeVariable("url") + "tasks/textPhotos/" + text_photo)
                 .into(textImageView);
@@ -136,7 +134,8 @@ public class task_activity2 extends AppCompatActivity {
 
             String url = ((MyApplication) getApplicationContext()).getSomeVariable("url") + "tasks/solveTask";
 
-            Request request = builder.url(String.format(url)).post(formBody)
+            String token = ((MyApplication) getApplicationContext()).getSomeVariable("token");
+            Request request = builder.url(String.format(url)).post(formBody).addHeader("Authorization","Bearer " + token)
                     .build();
 
             OkHttpClient client = new OkHttpClient();

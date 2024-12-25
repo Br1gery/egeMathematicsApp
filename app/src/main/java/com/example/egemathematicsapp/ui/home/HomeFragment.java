@@ -213,7 +213,9 @@ public class HomeFragment extends Fragment {
 
             String url = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("url")+ "tasks/number/" + task_number;
 
-            Request request = builder.url(String.format(url))
+            String token = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("token");
+
+            Request request = builder.url(String.format(url)).addHeader("Authorization","Bearer " + token)
                     .build();
 
             OkHttpClient client = new OkHttpClient();
