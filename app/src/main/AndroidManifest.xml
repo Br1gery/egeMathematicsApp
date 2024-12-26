@@ -16,7 +16,7 @@
         tools:targetApi="31">
         <activity
             android:name=".task_activity2"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".taskActivity"
             android:exported="false"

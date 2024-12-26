@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -60,7 +61,6 @@ public class task_activity2 extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             explanationText.setVisibility(View.INVISIBLE);
-            Log.i("CREATE","CREATE");
             return insets;
         });
         Intent intent = getIntent();
@@ -69,6 +69,19 @@ public class task_activity2 extends AppCompatActivity {
         String expl = String.valueOf(intent.getStringExtra("explanation_task"));
         String explanation_photo = String.valueOf(intent.getStringExtra("explanation_photo"));
         String text_photo = String.valueOf(intent.getStringExtra("text_photo"));
+
+        Boolean visibility = false;
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                visibility = false;
+            } else {
+                visibility = extras.getBoolean("visible");
+            }
+        } else {
+            visibility = (Boolean) savedInstanceState.getSerializable("visible");
+        }
 
         taskText = findViewById(R.id.task_text_view2);
         explanationText =findViewById(R.id.explanation_edit);
@@ -89,6 +102,12 @@ public class task_activity2 extends AppCompatActivity {
         Glide.with(this)
                 .load(((MyApplication) getApplicationContext()).getSomeVariable("url")+ "tasks/textPhotos/" + explanation_photo)
                 .into(explanationImageView);
+
+        if(Boolean.TRUE.equals(visibility)){
+            explanationText.setVisibility(View.VISIBLE);
+            explanationImageView.setVisibility(View.VISIBLE);
+            submitBtn.setVisibility(View.INVISIBLE);
+        }
 
         returnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +185,15 @@ public class task_activity2 extends AppCompatActivity {
         protected void onPostExecute(ArrayList<String> array) {
             super.onPostExecute(array);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putBoolean("visible", true);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
 }
