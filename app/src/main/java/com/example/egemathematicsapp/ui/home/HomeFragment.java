@@ -1,5 +1,6 @@
 package com.example.egemathematicsapp.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -83,6 +84,10 @@ public class HomeFragment extends Fragment {
         getTaskbtn11 = binding.task1Btn11;
         getTaskbtn12 = binding.task1Btn12;
 
+        SharedPreferences sharedPreferences =requireContext().getSharedPreferences("localStorage", Context.MODE_PRIVATE);
+        String savedString = sharedPreferences.getString("token", "empty");
+
+        Log.i("xd", savedString);
 
         getTaskbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,6 +224,11 @@ public class HomeFragment extends Fragment {
                     .build();
 
             OkHttpClient client = new OkHttpClient();
+
+            SharedPreferences sharedPreferences =requireContext().getSharedPreferences("localStorage", Context.MODE_PRIVATE);
+            String savedString = sharedPreferences.getString("token", "empty");
+
+            Log.i("xd", savedString);
 
             try {
                 Response response = client.newCall(request).execute();

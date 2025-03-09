@@ -74,6 +74,20 @@ public class login_activity extends AppCompatActivity {
         loginEditText = findViewById(R.id.emailEditText);
         passEditText = findViewById(R.id.pwdEditText);
         regViewBtn = findViewById(R.id.textView5);
+        SharedPreferences sharedPreferences = getSharedPreferences("localStorage", Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "empty");
+        String userName = sharedPreferences.getString("userName", "empty");
+
+        Log.i("token", token);
+        Log.i("userName", userName);
+
+        if(!token.equals("empty") && !userName.equals("empty")){
+            ((MyApplication) getApplicationContext()).setSomeVariable("userName", userName);
+            ((MyApplication) getApplicationContext()).setSomeVariable("token", token);
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +127,8 @@ public class login_activity extends AppCompatActivity {
                     .build();
 
             OkHttpClient client = new OkHttpClient();
+            SharedPreferences sharedPreferences = getSharedPreferences("localStorage", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
 
             try {
                 Response response = client.newCall(request).execute();
@@ -124,11 +140,15 @@ public class login_activity extends AppCompatActivity {
                     });
                     return null;
                 } else if (object.has("token")) {
-
                     token2 = object.getString("token");
                     userName = loginEditText.getText().toString();
                     ((MyApplication) getApplicationContext()).setSomeVariable("userName", userName);
                     ((MyApplication) getApplicationContext()).setSomeVariable("token", token2);
+
+                    editor.putString("token", token2);
+                    editor.putString("userName", userName);
+
+                    editor.apply();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);

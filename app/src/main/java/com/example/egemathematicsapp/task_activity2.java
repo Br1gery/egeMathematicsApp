@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +53,8 @@ public class task_activity2 extends AppCompatActivity {
     private ImageView textImageView;
     private ImageView explanationImageView;
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private Vibrator vibrator;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +123,9 @@ public class task_activity2 extends AppCompatActivity {
             }
         });
 
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        mediaPlayer = MediaPlayer.create(this, R.raw.correct);
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,13 +137,39 @@ public class task_activity2 extends AppCompatActivity {
                     myToast.show();
                     task_activity2.OkHttpHandler handler = new task_activity2.OkHttpHandler();
                     handler.execute();
+                    playSound();
                 }
                 else{
                     Toast myToast = Toast.makeText(getApplicationContext(),"Ваш ответ неверный!",Toast.LENGTH_SHORT);
+                    vibrate(200);
                     myToast.show();
                 }
             }
         });
+    }
+
+    private void vibrate(long duration) {
+        vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE));
+    }
+
+    private void playSound() {
+        if (mediaPlayer != null) {
+            mediaPlayer.start(); // Проигрываем звук
+
+            // Перематываем звук в начало после завершения
+            mediaPlayer.setOnCompletionListener(mp -> {
+                mp.seekTo(0);
+            });
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.release(); // Освобождаем ресурсы MediaPlayer
+            mediaPlayer = null;
+        }
     }
 
     public class OkHttpHandler extends AsyncTask<Void, Void, ArrayList<String>> {
@@ -189,8 +224,11 @@ public class task_activity2 extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        savedInstanceState.putBoolean("visible", true);
+        Intent intent = getIntent();
+        String asnwer = String.valueOf(intent.getStringExtra("answer_task"));
+        if(answerEdit.getText().toString().equals(asnwer)){
+            savedInstanceState.putBoolean("visible", true);
+        }
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
