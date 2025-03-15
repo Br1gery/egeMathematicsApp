@@ -1,5 +1,6 @@
 package com.example.egemathematicsapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
@@ -55,6 +57,12 @@ public class task_activity2 extends AppCompatActivity {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private Vibrator vibrator;
     private MediaPlayer mediaPlayer;
+    private TextView timer2;
+    private TextView enterAnswerText;
+    
+    private CountDownTimer timer;
+    private boolean isTimerRunning = false;
+    private long timeLeftInMillis = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +110,9 @@ public class task_activity2 extends AppCompatActivity {
         textImageView = findViewById(R.id.taskTextView);
         explanationImageView = findViewById(R.id.taskExplanationView);
 
+        timer2 = findViewById(R.id.timerTextView2);
+        enterAnswerText= findViewById(R.id.textView2);
+
         Glide.with(this)
                 .load(((MyApplication) getApplicationContext()).getSomeVariable("url") + "tasks/textPhotos/" + text_photo)
                 .into(textImageView);
@@ -126,6 +137,34 @@ public class task_activity2 extends AppCompatActivity {
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         mediaPlayer = MediaPlayer.create(this, R.raw.correct);
 
+        if (savedInstanceState != null) {
+            timeLeftInMillis = savedInstanceState.getLong("timeLeft");
+            isTimerRunning = savedInstanceState.getBoolean("isRunning");
+
+            if (isTimerRunning) {
+                // Если таймер работал, восстанавливаем его
+                startTimer(timeLeftInMillis);
+            } else {
+                // Если таймер завершился или не начинался, показываем последнее время
+                long minutes = (timeLeftInMillis / 1000) / 60;
+                long seconds = (timeLeftInMillis / 1000) % 60;
+                timer2.setText(String.format("%02d:%02d", minutes, seconds));
+            }
+        } else {
+            // Если это первый запуск, начинаем таймер
+            startTimer(timeLeftInMillis);
+        }
+
+        if(timeLeftInMillis == 0){
+            Toast myToast = Toast.makeText(getApplicationContext(),"Время вышло!",Toast.LENGTH_SHORT);
+            explanationText.setVisibility(View.VISIBLE);
+            explanationImageView.setVisibility(View.VISIBLE);
+            submitBtn.setVisibility(View.INVISIBLE);
+            answerEdit.setVisibility(View.INVISIBLE);
+            enterAnswerText.setVisibility(View.INVISIBLE);
+            myToast.show();
+        }
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,6 +185,32 @@ public class task_activity2 extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void startTimer(long startTime) {
+        timer = new CountDownTimer(startTime, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished; // Обновляем оставшееся время
+                long minutes = (millisUntilFinished / 1000) / 60;
+                long seconds = (millisUntilFinished / 1000) % 60;
+                timer2.setText(String.format("%02d:%02d", minutes, seconds));
+            }
+
+            @Override
+            public void onFinish() {
+                Toast myToast = Toast.makeText(getApplicationContext(),"Время вышло!",Toast.LENGTH_SHORT);
+                explanationText.setVisibility(View.VISIBLE);
+                explanationImageView.setVisibility(View.VISIBLE);
+                submitBtn.setVisibility(View.INVISIBLE);
+                answerEdit.setVisibility(View.INVISIBLE);
+                enterAnswerText.setVisibility(View.INVISIBLE);
+                myToast.show();
+                isTimerRunning = false;
+                timeLeftInMillis = 0; // Таймер завершился
+            }
+        }.start();
+        isTimerRunning = true;
     }
 
     private void vibrate(long duration) {
@@ -232,6 +297,8 @@ public class task_activity2 extends AppCompatActivity {
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putLong("timeLeft", timeLeftInMillis); // Сохраняем оставшееся время
+        savedInstanceState.putBoolean("isRunning", isTimerRunning);
     }
 
 }

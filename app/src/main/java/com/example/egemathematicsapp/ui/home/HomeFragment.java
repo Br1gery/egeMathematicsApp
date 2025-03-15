@@ -188,6 +188,7 @@ public class HomeFragment extends Fragment {
         });
 
 
+
         return root;
     }
 
@@ -202,10 +203,6 @@ public class HomeFragment extends Fragment {
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
             Request.Builder builder = new Request.Builder();
-//            RequestBody formBody = new FormBody.Builder()
-//                    .add("mail", loginEditText.getText().toString())
-//                    .add("password", passEditText.getText().toString())
-//                    .build();
 
             JSONObject json = new JSONObject();
             try {
@@ -214,7 +211,6 @@ public class HomeFragment extends Fragment {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-//            RequestBody formBody = RequestBody.create(JSON, String.valueOf(json));
 
             String url = ((MyApplication) getActivity().getApplicationContext()).getSomeVariable("url")+ "tasks/number/" + task_number;
 
