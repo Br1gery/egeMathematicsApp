@@ -15,6 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EgeMathematicsApp"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="default_channel_id" />
+
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".task_activity2"
             android:exported="false"/>
@@ -39,5 +52,7 @@
             android:exported="true"
             android:label="@string/app_name" />
     </application>
+
+
 
 </manifest>

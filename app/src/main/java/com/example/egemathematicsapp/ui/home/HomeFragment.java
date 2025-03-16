@@ -1,11 +1,14 @@
 package com.example.egemathematicsapp.ui.home;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,10 +24,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.egemathematicsapp.MainActivity;
 import com.example.egemathematicsapp.MyApplication;
+import com.example.egemathematicsapp.MyFirebaseMessagingService;
 import com.example.egemathematicsapp.databinding.FragmentHomeBinding;
 import com.example.egemathematicsapp.registration_activity;
 import com.example.egemathematicsapp.taskActivity;
 import com.example.egemathematicsapp.task_activity2;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -187,6 +194,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        String token = task.getResult();
+                        Log.d("TAG", "FCM Token: " + token);
+                        MyFirebaseMessagingService.sendTokenToServer(token, requireContext());
+                    }
+                });
 
 
         return root;

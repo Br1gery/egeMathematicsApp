@@ -1,7 +1,9 @@
 package com.example.egemathematicsapp.ui.dashboard;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,7 +75,13 @@ public class DashboardFragment extends Fragment {
         logOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), login_activity.class);
+                SharedPreferences sharedPreferences = requireActivity().getApplicationContext().getSharedPreferences("localStorage", Context.MODE_PRIVATE);
+                @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("token", "empty");
+                editor.putString("userName", "empty");
+                editor.apply();
+
+                Intent intent = new Intent(requireActivity().getApplicationContext(), login_activity.class);
                 intent.putExtra("exit", true);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
